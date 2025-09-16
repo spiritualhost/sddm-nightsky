@@ -1,0 +1,15 @@
+[SddmGreeterTheme]
+Name=nightsky
+Description=SDDM theme with flickering stars
+Author=Ryan Piazza
+Copyright=(c) 2025 Ryan Piazza
+License=GPL
+Type=sddm-theme
+Version=0.1
+Website=https://github.com/spiritualhost/sddm-nightsky
+Screenshot=
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Theme-Id=nightsky
+Theme-API=2.0

@@ -1,7 +1,9 @@
 import QtQuick 2.11
 import QtQuick.Layouts 1.11
 import QtQuick.Shapes 1.9
+import QtQuick.Particles 2.0
 import SddmComponents 2.0
+import "Components"
 
 Item {
 
@@ -58,6 +60,15 @@ Item {
             }
         }
     }
+
+
+    //Stars background
+    //Doesn't work -- fix this
+    //Stars {
+    //    anchors.fill: parent
+    //}
+
+
 
     //Universal watch for keys to reboot and shutdown
     Keys.onPressed: (event) => {
@@ -154,7 +165,7 @@ Item {
 
                     //Entry box label
                     Text{
-                        text: "login"
+                        text: "login:"
                         width: parent.width * 0.3
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
@@ -196,15 +207,13 @@ Item {
 
                     //Entry box label
                     Text{
-                        text: "password"
+                        text: "password:"
                         width: parent.width * 0.3
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         color: "white"
                         font.pixelSize: 14
                         font.family: config.font
-
-
                     }
 
 

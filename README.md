@@ -36,10 +36,15 @@ Once you're happy with the theme, you can apply it.
 
 ## Install 
 
+### Dependencies
+
+need adobe source code pro fonts
+
 ### From Source
 
 
 ### Arch Linux
+sudo pacman -S adobe-source-code-pro-fonts
 
 
 ## Configure

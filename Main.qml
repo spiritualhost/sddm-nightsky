@@ -4,34 +4,41 @@ import QtQuick.Shapes 1.9
 import SddmComponents 2.0
 
 Item {
+
+    //Establishes root container, which fills the screen.
     id: root
     width: Screen.width
     height: Screen.height
+    focus: true // global key listener
 
-
+    //Layout mirroring for right to left languages, like Arabic
     LayoutMirroring.enabled: Qt.locale().textDirection == Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
 
+    //Keeps track of which session the user selected
     property int sessionIndex: session.index
 
+    //Stores localized text for UI elements, such as login labels, error messages, prompts
     TextConstants { id: textConstants }
-
-
 
 
     Connections {
         target: sddm
 
+        //Successful login
         onLoginSucceeded: {
-            errorMessage.color = "steelblue"
+            errorMessage.color = "red"
             errorMessage.text = textConstants.loginSucceeded
         }
 
+        //Failed login
         onLoginFailed: {
             password.text = ""
             errorMessage.color = "red"
             errorMessage.text = textConstants.loginFailed
         }
+
+        //Other information message at login screen
         onInformationMessage: {
             errorMessage.color = "red"
             errorMessage.text = message
@@ -39,8 +46,8 @@ Item {
     }
 
 
-
-
+    //Shows the background image specified in the config file (theme.conf) unless failed, in which case shows default.
+    //Default background image can be changed in config file
     Background {
         anchors.fill: parent
         source: config.background
@@ -52,8 +59,34 @@ Item {
         }
     }
 
+    //Universal watch for keys to reboot and shutdown
+    Keys.onPressed: (event) => {
 
+        //If F1 pressed, shutdown the system
+        if (event.key === Qt.Key_F1) {
+            sddm.powerOff(); event.accepted = true
+        }
 
+        //If F2 pressed, reboot the system
+        if (event.key === Qt.Key_F2) {
+            sddm.reboot(); event.accepted = true
+        }
+
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter){
+            sddm.login(name.text, password.text, sessionIndex); event.accepted = true
+        }
+    }
+
+    //Reboot/shutdown label in top corner
+    Text {
+        text: "F1 shutdown F2 reboot"
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.margins: 10 //Padding from the edge
+        font.pixelSize: 14
+        font.family: config.font
+        color: "white"
+    }
 
 
 //Main window elements
@@ -64,90 +97,129 @@ Item {
         //visible: primaryScreen
 
         //New login box -- similar to the ly greeter
-        //Needs to replace the current rectangle image below
         Shape {
             id: login_rectangle
             anchors.centerIn: parent
 
-            x: 0
-            y: 0
-            width: 500
-            height: 450
+            //anchors.centerIn already centers this element
+            //x: 0
+            //y: 0
+            width: root.width / 2
+            height: root.height / 3
 
             ShapePath{
-                strokeWidth: 1
+                strokeWidth: 2
                 strokeColor: "white"
-                fillColor: "black"
+                fillColor: "transparent"
 
                 startX: 0; startY: 0
-                PathLine { x: 500; y: 0 }
-                PathLine { x: 500; y: 450 }
-                PathLine { x: 0; y: 450 }
+                PathLine { x: login_rectangle.width; y: 0 }
+                PathLine { x: login_rectangle.width; y: login_rectangle.height }
+                PathLine { x: 0; y: login_rectangle.height }
                 PathLine { x: 0; y: 0 }
             }
-        //}
 
 
-
-
-        //Image {
-        //    id: rectangle
-        //    anchors.centerIn: parent
-        //    width: Math.max(320, mainColumn.implicitWidth + 50)
-        //    height: Math.max(320, mainColumn.implicitHeight + 50)
-
-        //    source: "rectangle.png"
 
             Column {
                 id: mainColumn
                 anchors.centerIn: parent
                 spacing: 12
+                width: parent.width
 
-                Column {
+                //Row for hostname
+                Row {
                     width: parent.width
-                    spacing: 4
-                    Text {
-                        id: lblName
-                        width: parent.width
-                        text: textConstants.userName
-                        font.bold: true
-                        font.pixelSize: 12
+                    height: 30
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    //Hostname
+                    Text{
+                        text: config.hostname
+                        font.pixelSize: 14
+                        font.family: config.font
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                }
+
+
+                //Username row
+                Row {
+                    spacing: 8
+                    width: parent.width
+
+                    //Entry box label
+                    Text{
+                        text: "login"
+                        width: parent.width * 0.3
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        color: "white"
+                        font.pixelSize: 14
+                        font.family: config.font
                     }
 
+
+                    //Username entry box
                     TextBox {
                         id: name
-                        width: parent.width; height: 30
+                        width: parent.width * 0.5
+                        height: 30
                         text: userModel.lastUser
                         font.pixelSize: 14
+                        font.family: config.font
+                        color: "white"
+                        anchors.verticalCenter: parent.verticalCenter
 
-                        KeyNavigation.backtab: rebootButton; KeyNavigation.tab: password
+
+                        KeyNavigation.backtab: password; KeyNavigation.tab: password
 
                         Keys.onPressed: {
                             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                                 sddm.login(name.text, password.text, sessionIndex)
                                 event.accepted = true
-                            }
+                                }
                         }
                     }
                 }
 
-                Column {
+
+
+                //Password row
+                Row {
+                    spacing: 8
                     width: parent.width
-                    spacing : 4
-                    Text {
-                        id: lblPassword
-                        width: parent.width
-                        text: textConstants.password
-                        font.bold: true
-                        font.pixelSize: 12
+
+                    //Entry box label
+                    Text{
+                        text: "password"
+                        width: parent.width * 0.3
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        color: "white"
+                        font.pixelSize: 14
+                        font.family: config.font
+
+
                     }
 
+
+                    // Password
                     PasswordBox {
                         id: password
-                        width: parent.width; height: 30
+                        width: parent.width * 0.5
+                        height: 30
                         font.pixelSize: 14
+                        font.family: config.font
+                        color: "white"
+                        anchors.verticalCenter: parent.verticalCenter
 
-                        KeyNavigation.backtab: name; KeyNavigation.tab: session
+
+                        KeyNavigation.backtab: name; KeyNavigation.tab: name
 
                         Keys.onPressed: {
                             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -156,119 +228,32 @@ Item {
                             }
                         }
                     }
+
                 }
 
+
+
+
+
+                //Row for error messages
                 Row {
-                    spacing: 4
-                    width: parent.width / 2
-                    z: 100
-
-                    Column {
-                        z: 100
-                        width: parent.width * 1.3
-                        spacing : 4
-                        anchors.bottom: parent.bottom
-
-                        Text {
-                            id: lblSession
-                            width: parent.width
-                            text: textConstants.session
-                            wrapMode: TextEdit.WordWrap
-                            font.bold: true
-                            font.pixelSize: 12
-                        }
-
-                        ComboBox {
-                            id: session
-                            width: parent.width; height: 30
-                            font.pixelSize: 14
-
-                            arrowIcon: "angle-down.png"
-
-                            model: sessionModel
-                            index: sessionModel.lastIndex
-
-                            KeyNavigation.backtab: password; KeyNavigation.tab: layoutBox
-                        }
-                    }
-
-                    Column {
-                        z: 101
-                        width: parent.width * 0.7
-                        spacing : 4
-                        anchors.bottom: parent.bottom
-
-                        Text {
-                            id: lblLayout
-                            width: parent.width
-                            text: textConstants.layout
-                            wrapMode: TextEdit.WordWrap
-                            font.bold: true
-                            font.pixelSize: 12
-                        }
-
-                        LayoutBox {
-                            id: layoutBox
-                            width: parent.width; height: 30
-                            font.pixelSize: 14
-
-                            arrowIcon: "angle-down.png"
-
-                            KeyNavigation.backtab: session; KeyNavigation.tab: loginButton
-                        }
-                    }
-                }
-
-                Column {
+                    spacing: 8
                     width: parent.width
+
+                    // Error / Info Message
                     Text {
                         id: errorMessage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: textConstants.prompt
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        text: "" //empty unless error message
                         font.pixelSize: 10
+                        font.family: config.font
                     }
                 }
 
-                Row {
-                    spacing: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    property int btnWidth: Math.max(loginButton.implicitWidth,
-                                                    shutdownButton.implicitWidth,
-                                                    rebootButton.implicitWidth, 80) + 8
-                    Button {
-                        id: loginButton
-                        text: textConstants.login
-                        width: parent.btnWidth
-
-                        onClicked: sddm.login(name.text, password.text, sessionIndex)
-
-                        KeyNavigation.backtab: layoutBox; KeyNavigation.tab: shutdownButton
-                    }
-
-                    Button {
-                        id: shutdownButton
-                        text: textConstants.shutdown
-                        width: parent.btnWidth
-
-                        onClicked: sddm.powerOff()
-
-                        KeyNavigation.backtab: loginButton; KeyNavigation.tab: rebootButton
-                    }
-
-                    Button {
-                        id: rebootButton
-                        text: textConstants.reboot
-                        width: parent.btnWidth
-
-                        onClicked: sddm.reboot()
-
-                        KeyNavigation.backtab: shutdownButton; KeyNavigation.tab: name
-                    }
-                }
             }
         }
     }
-
 
 
 

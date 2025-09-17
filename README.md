@@ -96,7 +96,7 @@ Some configuration settings can be changed, including the background image in th
 
 Initial stylistic inspiration was the [ly greeter](https://github.com/fairyglade/ly). I hope more features can be added in the future to get even closer (e.g., the background animations).  
 
-Some minor logical inspiration came from the [Maldives SDDM theme](https://github.com/ArtemSmaznov/SDDM-themes.git), but the changes were significant. The license is included as COPYING regardless. 
+Some minor logical inspiration came from the [Maldives SDDM theme](https://github.com/ArtemSmaznov/SDDM-themes.git), but the changes were significant. The license is included as COPYING regardless. Copyright (C) 2012 Dr. Peter Schmidt
 
 The wallpaper was taken from [here](https://unsplash.com/photos/cluster-of-stars-in-the-sky-qVotvbsuM_c). It was created by [Paul Lichtblau](https://unsplash.com/@laup) and is covered under the [Unsplash Free Use License](https://unsplash.com/license). 
 

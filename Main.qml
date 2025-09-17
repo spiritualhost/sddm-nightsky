@@ -1,9 +1,7 @@
 import QtQuick 2.11
 import QtQuick.Layouts 1.11
 import QtQuick.Shapes 1.9
-import QtQuick.Particles 2.0
 import SddmComponents 2.0
-import "Components"
 
 Item {
 
@@ -60,13 +58,6 @@ Item {
             }
         }
     }
-
-
-    //Stars background
-    //Doesn't work -- fix this
-    //Stars {
-    //    anchors.fill: parent
-    //}
 
 
 

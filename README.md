@@ -4,6 +4,13 @@
  A simple theme for the <a href="https://github.com/sddm/sddm">SDDM Login Manager</a>
 </p>
 
+<h2 align=center>Preview</h2>
+<center>
+<img src="./preview.png" alt="preview-1">
+</center>
+
+
+
 ## How SDDM Themes Work
 
 SDDM is the typical greeter (i.e., login manager) for KDE Plasma Linux Systems. It is closely integrated with the Plasma desktop and with Plasma 6, the integration has become even closer. 

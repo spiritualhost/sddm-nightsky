@@ -58,7 +58,7 @@ git clone https://github.com/spiritualhost/sddm-nightsky.git ~/nightsky
 2. Move the theme to the proper folder
 
 ```
-sudo mv ~/nightsky /usr/shre/sddm/themes
+sudo mv ~/nightsky /usr/share/sddm/themes
 ```
 
 3. Install the Dependencies
@@ -66,7 +66,7 @@ sudo mv ~/nightsky /usr/shre/sddm/themes
 - Arch Linux:
 ```
 #QML dependencies
-sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-quickcontrols2 qt5-quicklayouts qt5-quickshapes
+sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-quickcontrols2
 
 #Font
 sudo pacman -S adobe-source-code-pro-fonts

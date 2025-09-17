@@ -32,7 +32,7 @@ To get a preview of a new SDDM theme without needing to logout and login repeate
 
 ```
 
-$ sddm-greeter --test-mode --theme /usr/share/nightsky
+$ sddm-greeter --test-mode --theme /usr/share/sddm/themes/nightsky
 
 ```
 

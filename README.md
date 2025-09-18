@@ -92,6 +92,12 @@ Then feel free to reboot to see it in action. If anything breaks at the first re
 
 Some configuration settings can be changed, including the background image in the theme.conf. 
 
+## Potential Issues
+
+- Shutdown/Reboot keys buggy on some setups
+- Some distributions may require extra dependencies
+- Wayland may cause the theme (and SDDM) to behave differently
+
 ## Credits
 
 Initial stylistic inspiration was the [ly greeter](https://github.com/fairyglade/ly). I hope more features can be added in the future to get even closer (e.g., the background animations).  
